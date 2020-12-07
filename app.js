@@ -5,6 +5,8 @@ const rootDir = require('./util/path');
 const express = require('express');
 const bodyParser = require('body-parser')
 
+const errorController = require('./controllers/error');
+
     // Creates express application
 const app = express();
 
@@ -18,7 +20,7 @@ app.set('view engine', 'ejs');
         // Need to render actual files in routes.js files
 app.set('views', 'views')
 
-const adminData = require('./routes/admin');
+const adminRoutes = require('./routes/admin');
 const shopRoutes = require('./routes/shop');
 
 // .use allows you to add a new middleware function
@@ -30,17 +32,11 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static(path.join(rootDir, "public")));
 
         // Valid middleware Function
-app.use('/admin', adminData.routes);
+app.use('/admin', adminRoutes);
 app.use(shopRoutes);
 
 
     //Catch-all
-app.use('/', (req, res, next) => {
-    res.status(404).render('404', {pageTitle: 'Page Not Found'});
-
-    /* Static HTML 404 Page
-    res.status(404).sendFile(path.join(rootDir, 'views', '404.html'));
-    */
-});
+app.use(errorController.get404);
 
 app.listen(3000);
