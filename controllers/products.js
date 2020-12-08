@@ -21,18 +21,21 @@ exports.postAddProduct = (req, res, next) => {
 }
 
 exports.getProducts = (req, res, next) => {
-    const products = Product.fetchAll();
+                    // Callback
+    Product.fetchAll((products) => {
 
-    // Uses default template engine & return from specified folder by name
-                        // Map data to obj & key name. Can now access key in template
-    res.render(
-        'shop', 
-        {
-            pageTitle: 'Shop', 
-            prods: products, 
-            path: "/"
-        }
-    );
+        // Uses default template engine & return from specified folder by name
+                            // Map data to obj & key name. Can now access key in template
+        res.render(
+            'shop', 
+            {
+                pageTitle: 'Shop', 
+                prods: products, 
+                path: "/"
+            }
+        );
+    });
+
 
 
 
